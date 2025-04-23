@@ -1,0 +1,35 @@
+
+pragma solidity ^0.8.0;
+
+contract ModelOwnership {
+
+    address public owner;
+    string public modelName;
+    string public modelDescription;
+
+    // Event to log ownership transfer
+    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
+
+    // Constructor to initialize model name, description, and owner
+    constructor(string memory _modelName, string memory _modelDescription) {
+        owner = msg.sender;
+        modelName = _modelName;
+        modelDescription = _modelDescription;
+    }
+
+    // Function to transfer ownership
+    function transferOwnership(address newOwner) public {
+        require(msg.sender == owner, "Only the owner can transfer ownership.");
+        require(newOwner != address(0), "New owner cannot be the zero address.");
+        
+        address previousOwner = owner;
+        owner = newOwner;
+
+        emit OwnershipTransferred(previousOwner, newOwner);
+    }
+
+    // Function to get ownership details
+    function getOwnershipDetails() public view returns (address, string memory, string memory) {
+        return (owner, modelName, modelDescription);
+    }
+}
